@@ -34,7 +34,7 @@ public class Tokenizer {
 				Matcher matcher = mGlobalPattern.matcher("");
 				Function<String, Token> factory = (Function<String, Token>)mInitTokenFactoryMap.get(key);
 				if(factory == null){
-					System.err.format("key " + key + " has no matching factory\n");
+					System.err.println("key " + key + " has no matching factory");
 				}
 				System.out.println(gorupCunter + ":" + matcher.groupCount() + " " + key + " => " + value);
 				while(gorupCunter++ <= matcher.groupCount()){
@@ -59,18 +59,26 @@ public class Tokenizer {
 			String line;
 			for (int lineNum = 0; (line = reader.readLine()) != null; lineNum++){
 				Matcher matcher = mGlobalPattern.matcher(line);
-				
+				int lineCursor = 0;
 				while (matcher.find()) {
 					for (int index = 1; index <= matcher.groupCount(); index++) {
 						if(matcher.group(index) == null){
 							continue;
 						}
+						if(lineCursor != matcher.start()){
+							System.err.println(errUnexpectedStr(line.substring(lineCursor, matcher.start()), lineNum, lineCursor));
+						}
+						lineCursor = matcher.end();
+						
 						String test = matcher.group(index);
 						Token token = mTokenFactoryVec.get(index).apply(matcher.group(index));
 						token.debug(lineNum, matcher.start());
 						mTokenVec.add(token);
 						break;
 					}
+				}
+				if(lineCursor < line.length()){
+					System.err.println(errUnexpectedStr(line.substring(lineCursor), lineNum, lineCursor));
 				}
 			}
 		}catch (Exception e){
@@ -79,6 +87,12 @@ public class Tokenizer {
 		}
 	}
 	
+	
+	
+	
+	protected String errUnexpectedStr(String str, int line, int offest){
+		return 	"@(" + (line + 1) + ":" + (offest + 1) + ") unexpected string |" + str + "|";
+	}
 	
 	private HashMap	mInitTokenWordDefMap = new HashMap();
 	private HashMap	mInitTokenFactoryMap = new HashMap();

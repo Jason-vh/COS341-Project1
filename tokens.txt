@@ -11,5 +11,5 @@ IO:\binput\b|\boutput\b
 Halt:\bhalt\b
 Procedure:\bproc\b
 Integer:-?0|([1-9][0-9]*)
+ShortString:"( |[a-z]|(0|([1-9]))){0,8}"
 Variable:\b[a-z]((0|[1-9])|[a-z])*\b
-ShortString:\b"( |[a-z]|(0|([1-9]))){0,8}"\b

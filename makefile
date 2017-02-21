@@ -1,5 +1,8 @@
 make:
-	g++ -std=c++11 -g *.cpp
+	javac *.java
+
+run:
+	java COS341_p1
 	
-run: make
-	./a.out
+clean:
+	-@rm *.class
