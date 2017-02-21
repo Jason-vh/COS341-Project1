@@ -1,19 +1,22 @@
+import Tokens.Token;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Vector;
 import java.util.function.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Tokenizer {
+class Tokenizer {
 	Tokenizer(){
 	}
-	public void linkFactory(String key, Function<String, Token> factory){
+	void linkFactory(String key, Function<String, Token> factory){
 		mInitTokenFactoryMap.put(key, factory);
 	}
-	public void init(String tokenDefFilename){
+	void init(String tokenDefFilename){
 		String globalExpression = "(^$)";
 		int gorupCunter = 0;
 		try{
@@ -32,14 +35,14 @@ public class Tokenizer {
 				globalExpression += "|(" + value + ")";
 				mGlobalPattern = Pattern.compile(globalExpression);
 				Matcher matcher = mGlobalPattern.matcher("");
-				Function<String, Token> factory = (Function<String, Token>)mInitTokenFactoryMap.get(key);
+				Function<String, Token> factory = mInitTokenFactoryMap.get(key);
 				if(factory == null){
 					System.err.println("key " + key + " has no matching factory");
 				}
 				System.out.println(gorupCunter + ":" + matcher.groupCount() + " " + key + " => " + value);
 				while(gorupCunter++ <= matcher.groupCount()){
 					if(factory == null){
-						mTokenFactoryVec.add(x->new Token(x));
+						mTokenFactoryVec.add(Token::new);
 					}else{
 						mTokenFactoryVec.add(factory);
 					}
@@ -53,7 +56,7 @@ public class Tokenizer {
 		}
 	}
 	
-	public void tokenize(String filename){
+	void tokenize(String filename){
 		try{
 			BufferedReader reader = new BufferedReader(new FileReader(filename));
 			String line;
@@ -86,20 +89,35 @@ public class Tokenizer {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
-	
-	protected String errUnexpectedStr(String str, int line, int offest){
+
+	void saveTokensToFile(String filename) {
+		int counter = 0;
+		try {
+			PrintWriter writer = new PrintWriter(filename, "UTF-8");
+
+			for (Token t : mTokenVec) {
+			    writer.format("[T%d,%s,%s]\n", counter, t.getClass(), t.getSnippet());
+                writer.println("T" + counter + ", " + t.getClass() + ", \"" + t.getSnippet() + "\"]");
+			}
+
+			writer.close();
+		} catch (IOException e) {
+			System.err.format("Exception occurred trying to print to %s", filename);
+			e.printStackTrace();
+		}
+
+	}
+
+	private String errUnexpectedStr(String str, int line, int offest){
 		return 	"@(" + (line + 1) + ":" + (offest + 1) + ") unexpected string |" + str + "|";
 	}
 	
 	private HashMap	mInitTokenWordDefMap = new HashMap();
-	private HashMap	mInitTokenFactoryMap = new HashMap();
+	private HashMap<String, Function<String, Token>> mInitTokenFactoryMap = new HashMap<>();
 	
-	private Vector<Function<String, Token>> mTokenFactoryVec = new Vector<Function<String, Token>>();//use to build tokens @ call tikenize
+	private Vector<Function<String, Token>> mTokenFactoryVec = new Vector<>();//use to build tokens @ call tikenize
 	
-	private Vector<Token> mTokenVec = new Vector<Token>();
+	private Vector<Token> mTokenVec = new Vector<>();
 	
 	private Pattern mGlobalPattern;
 }
