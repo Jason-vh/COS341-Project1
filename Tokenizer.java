@@ -75,9 +75,11 @@ class Tokenizer {
 						
 						String test = matcher.group(index);
 						Token token = mTokenFactoryVec.get(index).apply(matcher.group(index));
-						token.debug(lineNum, matcher.start());
-						mTokenVec.add(token);
-						break;
+						if (token.isValidExpression()) {
+                            mTokenVec.add(token);
+                            token.debug(lineNum, matcher.start());
+                        }
+                        break;
 					}
 				}
 				if(lineCursor < line.length()){
@@ -96,8 +98,7 @@ class Tokenizer {
 			PrintWriter writer = new PrintWriter(filename, "UTF-8");
 
 			for (Token t : mTokenVec) {
-			    writer.format("[T%d,%s,%s]\n", counter, t.getClass(), t.getSnippet());
-                writer.println("T" + counter + ", " + t.getClass() + ", \"" + t.getSnippet() + "\"]");
+			    writer.format("[T%d,%s,%s]\n", counter, t.getExpressionType(), t.getExpression());
 			}
 
 			writer.close();

@@ -1,26 +1,33 @@
 
-import java.io.*;
-import java.util.HashMap;
-import java.util.regex.*;
-
-import java.util.function.*;
+import Tokens.*;
 
 
 public class COS341_p1 {
 	
 	public static void main(String[] args) {
-		Function<String, Token> func = x -> new Token(x);
-		
 		Tokenizer tokenizer = new Tokenizer();
-		
-		tokenizer.linkFactory("Test",x -> new TestToken(x));
-		tokenizer.linkFactory("Comparison",x -> new Comparison(x));
-		tokenizer.linkFactory("BooleanOp",x -> new BooleanOp(x));
-		tokenizer.linkFactory("ShortString",x -> new ShortString(x));
-		tokenizer.linkFactory("Variable",x -> new Variable(x));
-		tokenizer.init("tokens.txt");
+
+        tokenizer.linkFactory("Tokens.Assignment", AssignmentOp::new);
+        tokenizer.linkFactory("Tokens.BooleanOp", BooleanOp::new);
+        tokenizer.linkFactory("Tokens.Comparison", Comparison::new);
+        tokenizer.linkFactory("Tokens.ControlStructure", ControlStructure::new);
+        tokenizer.linkFactory("Tokens.Grouping", Grouping::new);
+        tokenizer.linkFactory("Tokens.Halt", Halt::new);
+        tokenizer.linkFactory("Tokens.Integer", Tokens.Integer::new);
+        tokenizer.linkFactory("Tokens.NumberOp", NumberOp::new);
+        tokenizer.linkFactory("Tokens.IO", IO::new);
+        tokenizer.linkFactory("Tokens.Procedure", Procedure::new);
+        tokenizer.linkFactory("Tokens.ShortString", ShortString::new);
+        tokenizer.linkFactory("Test", TestToken::new);
+        tokenizer.linkFactory("Tokens.Variable", Variable::new);
+        tokenizer.linkFactory("Tokens.WhiteSpace", Tokens.WhiteSpace::new);
+
+
+        tokenizer.init("tokens.txt");
 		
 		tokenizer.tokenize("data.txt");
+
+		tokenizer.saveTokensToFile("output.txt");
 	}
 		
 }
