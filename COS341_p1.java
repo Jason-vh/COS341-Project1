@@ -5,6 +5,12 @@ import Tokens.*;
 public class COS341_p1 {
 	
 	public static void main(String[] args) {
+		if(args.length < 1){
+			System.out.println("No file specified.");
+			System.exit(1);
+		}
+		
+		
 		Tokenizer tokenizer = new Tokenizer();
 
         tokenizer.linkFactory("Tokens.Assignment", AssignmentOp::new);
@@ -25,7 +31,7 @@ public class COS341_p1 {
 
         tokenizer.init("tokens.txt");
 		
-		tokenizer.tokenize("data.txt");
+		tokenizer.tokenize(args[0]);
 
 		tokenizer.saveTokensToFile("output.txt");
 	}
