@@ -32,8 +32,10 @@ public class COS341_p1 {
         tokenizer.init("tokens.txt");
 		
 		tokenizer.tokenize(args[0]);
+		
 
 		tokenizer.saveTokensToFile("output.txt");
+		
 	}
 		
 }

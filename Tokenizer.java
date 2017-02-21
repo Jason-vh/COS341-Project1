@@ -17,7 +17,7 @@ class Tokenizer {
 		mInitTokenFactoryMap.put(key, factory);
 	}
 	void init(String tokenDefFilename){
-		String globalExpression = "(^$| )";//added a space to prevent detection as error 
+		String globalExpression = "(^$)";
 		int gorupCunter = 0;
 		try{
 			BufferedReader reader = new BufferedReader(new FileReader(tokenDefFilename));
@@ -44,12 +44,16 @@ class Tokenizer {
 				while(gorupCunter++ <= matcher.groupCount()){
 					if(factory == null){
 						mTokenFactoryVec.add(Token::new);
+						System.out.println("TEST: does this run?");
 					}else{
 						mTokenFactoryVec.add(factory);
 					}
 				}
 				gorupCunter--;
 			}
+			//use to consume spaces
+			mGlobalPattern = Pattern.compile(globalExpression + "|( )");
+			mTokenFactoryVec.add(null);
 			reader.close();
 		}catch (Exception e){
 			System.err.format("Exception occurred trying to read '%s'.", tokenDefFilename);
@@ -76,12 +80,14 @@ class Tokenizer {
 						lineCursor = matcher.end();
 						
 						String test = matcher.group(index);
-						Token token = mTokenFactoryVec.get(index).apply(matcher.group(index));
-						if (token.isValidExpression()) {
-                            mTokenVec.add(token);
-                            if(mDebugFlag)
-								token.debug(lineNum, matcher.start());
-                        }
+						if(mTokenFactoryVec.get(index) != null){//test for space
+							Token token = mTokenFactoryVec.get(index).apply(matcher.group(index));
+							if (token.isValidExpression()) {
+								mTokenVec.add(token);
+								if(mDebugFlag)
+									token.debug(lineNum, matcher.start());
+							}
+						}
                         break;
 					}
 				}
@@ -92,6 +98,10 @@ class Tokenizer {
 		}catch (Exception e){
 			System.err.format("Exception occurred trying to read '%s'.", filename);
 			e.printStackTrace();
+		}
+		if( ! mTokenizeGood){
+			System.out.println("Detected one or more lexical errors, now terminating...");
+			System.exit(1);
 		}
 	}
 
@@ -108,10 +118,6 @@ class Tokenizer {
 		} catch (IOException e) {
 			System.err.format("Exception occurred trying to print to %s", filename);
 			e.printStackTrace();
-		}
-		if( ! mTokenizeGood){
-			System.out.println("Detected one or more lexical errors, now terminating...");
-			System.exit(1);
 		}
 	}
 
@@ -134,9 +140,7 @@ class Tokenizer {
 		System.out.println(line);
 		while(offsetBegin-- > shiftBegin)
 			System.out.print("-");
-		System.out.println("^");
-		int foo = 0;
-		
+		System.out.println("^");		
 	}
 	
 	private HashMap	mInitTokenWordDefMap = new HashMap();
