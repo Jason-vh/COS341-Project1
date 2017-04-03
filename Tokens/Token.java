@@ -2,7 +2,6 @@ package Tokens;
 
 public class Token {
 	public void debug(int line, int offset){
-		
 		System.out.println(this.getClass().getSimpleName() + "(" + line + ":" + offset +")" + mValue);
 	}
 
@@ -23,4 +22,9 @@ public class Token {
 	}
 	
 	private String mValue;
+
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName();
+	}
 }

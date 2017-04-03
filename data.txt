@@ -1,3 +1,19 @@
- ,or <> eqeq eq = "one", "12345678" "" "123456789"this abd iseq a testthen then be  a11 11a if it works and < ac0d abd aA3d oor or door
-nice "notfound" "NOTFOUND"
-
+input(x);
+num = x;
+res = "unknown";
+str = "even";
+checknumber;
+if ( eq(res, str) )
+    then { output(str) }
+    else { output(res) } ;
+halt ;
+proc checknumber {
+    n = num ;
+    if ( (n<0) )
+        then { n = mult(n,-1) } ;
+    while( (n>0) )
+        { n = sub(n,2) } ;
+    if( eq(n,0) )
+        then { res = "even" }
+        else { res = "odd" } ;
+}

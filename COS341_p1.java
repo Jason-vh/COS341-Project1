@@ -28,6 +28,7 @@ public class COS341_p1 {
 		tokenizer.tokenize("data.txt");
 
 		tokenizer.saveTokensToFile("output.txt");
+		tokenizer.parse();
 	}
 		
 }

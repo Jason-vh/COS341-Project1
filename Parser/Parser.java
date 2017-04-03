@@ -1,0 +1,440 @@
+package Parser;
+
+import Tokens.Token;
+
+import java.util.ArrayList;
+import java.util.Stack;
+
+public class Parser {
+    private Stack<Token> tokens = new Stack<>();
+    private SyntaxTree tree = new SyntaxTree();
+
+    public void parse(ArrayList<Token> _tokens) {
+        System.out.println("Received " + _tokens.size() + " tokens.");
+        for (int x = _tokens.size()-1; x >= 0; x--) {
+            tokens.push(_tokens.get(x));
+        }
+
+        System.out.println("The top token is " + tokens.peek());
+        if (tokens.size() > 0)
+            parseProgram(tree.root);
+        tree.print();
+        tree.DFS();
+        tree.generateGraph();
+    }
+
+    private void parseProgram(Node parent) {
+        if (tokens.size() == 0)
+            return;
+
+        Node n = tree.addNode("Program", "NT", parent);
+
+        parseCode(n);
+        parseProcedureDefinitions(n);
+    }
+
+    private void parseCode(Node parent) {
+        Node n = tree.addNode("Code", "NT", parent);
+//        Node n = parent;
+        if (tokens.size() == 0) {
+            return;
+        }
+
+        String e = tokens.peek().getExpressionType();
+        String i = tokens.peek().getExpression();
+        System.out.println("Parsing Code [" + e + " - " + i + "]");
+        switch (e) {
+            case "Variable":
+                parseInstruction(n);
+                parseCode(n);
+                break;
+            case "Grouping":
+                if (i.equals(";")) {
+                    popToken(";", n);
+                    parseCode(n);
+                }
+                break;
+            case "IO":
+            case "Halt":
+            case "ControlStructure":
+                if (i.equals("then") || i.equals("else")) {
+                    error("Unexpected 'then' or 'else'");
+                }
+                parseInstruction(n);
+                parseCode(n);
+                break;
+        }
+
+    }
+
+    private void parseProcedureDefinitions(Node parent) {
+        Node n = parent;
+        if (tokens.size() == 0)
+            return;
+
+        String i = tokens.peek().getExpression();
+
+        if (i.equals(";")) {
+            parseSemicolon(n);
+            parseProcedure(n);
+        }
+        if (i.equals("proc")) {
+            parseProcedureDefinition(n);
+        }
+    }
+
+    private void parseProcedure(Node parent) {
+        Node n = tree.addNode("Procedure", "NT", parent);
+
+        if (tokens.size() == 0)
+            return;
+
+        String i = tokens.peek().getExpression();
+        if (i.equals("proc")) {
+            popToken("Procedure", n);
+            popToken("Variable", n);
+            popToken("{", n);
+            parseProgram(n);
+            popToken("}", n);
+            parseSemicolon(n);
+        } else {
+            error("Expected procedure definition.");
+        }
+    }
+
+    private void parseProcedureDefinition(Node parent) {
+        Node n = parent;
+        if (tokens.size() == 0)
+            return;
+
+        String i = tokens.peek().getExpression();
+        if (i.equals("proc")) {
+            parseProcedure(n);
+            parseProcedureDefinition(n);
+        }
+    }
+
+    private void parseInstruction(Node parent) {
+        Node n = tree.addNode("Instruction", "NT", parent);
+        if (tokens.size() == 0) {
+            error("Uh there should be something here");
+        }
+
+        String e = tokens.peek().getExpressionType();
+        String i = tokens.peek().getExpression();
+        System.out.println("Parsing Instruction [" + e + " - " + i + "]");
+        if (e.equals("Variable")) {
+            Token t = tokens.pop();
+            if (tokens.peek() != null && tokens.peek().getExpressionType().equals("AssignmentOp")) {
+                // Its an assign
+                tokens.push(t);
+                parseAssignment(n);
+            } else {
+                // It's a call
+                tokens.push(t);
+                popToken("Variable", n);
+            }
+        } else if (e.equals("IO")) {
+            parseInputOutput(n);
+        } else if (i.equals("halt")) {
+            popToken("halt", n);
+        } else if (i.equals("if")) {
+            parseConditional(n);
+        } else if (i.equals("while") || i.equals("for")) {
+            parseLoop(n);
+        } else {
+            error("Expecting variable, IO instruction, halt, if, or loop statement.");
+        }
+        parseSemicolon(n);
+    }
+
+    private void parseAssignment(Node parent) {
+        Node n = tree.addNode("Assignment", "NT", parent);
+
+        if (tokens.size() == 0)
+            error("Uh something should be here");
+
+        String e = tokens.peek().getExpressionType();
+        if (e.equals("Variable")) {
+            popToken("Variable", n);
+            popToken("AssignmentOp", n);
+            parseVariable(n);
+        } else {
+            error("Expected a variable before the assignment operator, got " + e);
+        }
+    }
+
+    private void parseVariable(Node parent) {
+//        Node n = tree.addNode("Variable", "NT", parent);
+        Node n = parent;
+
+        if (tokens.size() == 0)
+            return;
+
+        String e = tokens.peek().getExpressionType();
+        switch (e) {
+            case "Variable":
+                popToken("Variable", n);
+                break;
+            case "ShortString":
+                popToken("ShortString", n);
+                break;
+            case "Integer":
+            case "NumberOp":
+                parseNumericalExpression(n);
+                break;
+            default:
+                error("Expected variable name, string literal or numerical expression");
+                break;
+        }
+    }
+
+    private void parseNumericalOperation(Node parent) {
+        Node n = tree.addNode("NumericalOperation", "NT", parent);
+
+        if (tokens.size() == 0)
+            return;
+
+        String e = tokens.peek().getExpressionType();
+        if (e.equals("NumberOp")) {
+            popToken("NumberOp", n);
+            popToken("(", n);
+            parseNumericalExpression(n);
+            popToken(",", n);
+            parseNumericalExpression(n);
+            popToken(")", n);
+        } else {
+            error("Expected numerical operation, got " + tokens.peek().getExpression());
+        }
+    }
+
+    private void parseNumericalExpression(Node parent) {
+//        Node n = tree.addNode("NumericalExpression", "NT", parent);
+        Node n = parent;
+        if (tokens.size() == 0)
+            return;
+
+        String e = tokens.peek().getExpressionType();
+        switch (e) {
+            case "Variable":
+                popToken("Variable", n);
+                break;
+            case "NumberOp":
+                parseNumericalOperation(n);
+                break;
+            case "Integer":
+                popToken("Integer", n);
+                break;
+            default:
+                error("Expecting variable name, integer literal or numerical operator; got " + tokens.peek().getExpression());
+                break;
+        }
+    }
+
+    private void parseInputOutput(Node parent) {
+        Node n = tree.addNode("IO Instruction", "NT", parent);
+
+        if (tokens.size() == 0)
+            error("Uh something should be here");
+
+        String e = tokens.peek().getExpressionType();
+        if (e.equals("IO")) {
+            popToken("IO", n);
+            popToken("(", n);
+            popToken("Variable", n);
+            popToken(")", n);
+            parseSemicolon(n);
+        } else {
+            error("Error: Expecting IO instruction, got " + e);
+        }
+    }
+
+    private void parseConditional(Node parent) {
+        Node n = tree.addNode("IfStatement", "NT", parent);
+
+        if (tokens.size() == 0)
+            error("Uh there should be more stuff here");
+
+        String i = tokens.peek().getExpression();
+
+        if (i.equals("if")) {
+            popToken("if", n);
+            popToken("(", n);
+            parseBool(n);
+            popToken(")", n);
+            popToken("then", n);
+            popToken("{", n);
+            parseCode(n);
+            popToken("}", n);
+            parseElse(n);
+        }
+
+    }
+
+    private void parseElse(Node parent) {
+        Node n = tree.addNode("ElseStatement", "NT", parent);
+
+        String i = tokens.peek().getExpression();
+        if (i.equals("else")) {
+            popToken("else", n);
+            popToken("{", n);
+            parseCode(n);
+            popToken("}", n);
+        }
+    }
+
+    private void parseBool(Node parent) {
+        Node n = parent;
+
+        if (tokens.size() == 0)
+            error("Uh there should be something else here");
+
+        String i = tokens.peek().getExpression();
+
+        switch (i) {
+            case "(":
+                n = tree.addNode("BooleanCompare", "NT", parent);
+                popToken("(", n);
+//                popToken("Variable");
+                parseVariable(n);
+                parseEquality(n);
+//                popToken("Variable");
+                parseVariable(n);
+                popToken(")", n);
+                break;
+            case "eq":
+                n = tree.addNode("BooleanEquality", "NT", parent);
+                popToken("eq", n);
+                popToken("(", n);
+                parseVariable(n);
+                popToken(",", n);
+                parseVariable(n);
+                popToken(")", n);
+                break;
+            case "and":
+            case "or":
+                n = tree.addNode("BooleanOperation", "NT", parent);
+                popToken("BooleanOp", n);
+                popToken("(", n);
+                parseBool(n);
+                popToken(",", n);
+                parseBool(n);
+                popToken(")", n);
+                break;
+            case "not":
+                n = tree.addNode("BooleanNot", "NT", parent);
+                popToken("not", n);
+                parseBool(n);
+                break;
+            default:
+                error("Expected boolean expression, got " + i);
+        }
+    }
+
+    private void parseLoop(Node parent) {
+        Node n = tree.addNode("Loop", "NT", parent);
+
+        if (tokens.size() == 0) {
+            error("Uh there should be something else here");
+        }
+
+        String i = tokens.peek().getExpression();
+
+        switch (i) {
+            case "while":
+                popToken("while", n);
+                popToken("(", n);
+                parseBool(n);
+                popToken(")", n);
+                popToken("{", n);
+                parseCode(n);
+                popToken("}", n);
+                break;
+            case "for":
+                popToken("for", n);
+                popToken("(", n);
+                parseVariable(n);
+                popToken("=", n);
+                popToken("0", n);
+                popToken(";", n);
+                parseVariable(n);
+                popToken("=", n);
+                popToken("add", n);
+                popToken("(", n);
+                parseVariable(n);
+                popToken(",", n);
+                popToken("1", n);
+                popToken(")", n);
+                popToken(")", n);
+
+                popToken("{", n);
+                parseCode(n);
+                popToken("}", n);
+                break;
+            default:
+                error("Expected for or while, got " + i);
+                break;
+        }
+    }
+
+    private void parseEquality(Node parent) {
+        Node n = parent;
+        if (tokens.size() == 0)
+            error("Uh there should be something here");
+
+        String i = tokens.peek().getExpression();
+        switch (i) {
+            case "<":
+                popToken("<", n);
+                break;
+            case ">":
+                popToken(">", n);
+                break;
+            default:
+                error("Expected < or >, got " + i);
+                break;
+        }
+    }
+
+    private void parseSemicolon(Node parent) {
+        Node n = parent;
+        if (tokens.size() == 0)
+            return;
+
+        String i = tokens.peek().getExpression();
+        if (i.equals(";")) {
+            popToken(";", n);
+        }
+    }
+
+    private void popToken(String t, Node n) {
+        if (tokens.size() == 0) {
+            error("Uh we ran out of things when we shouldn't have");
+            return;
+        }
+
+        if (t.equals(tokens.peek().getExpression()) || t.equals(tokens.peek().getExpressionType())) {
+            switch (t) {
+                case ";":
+                case "(":
+                case ")":
+                case "{":
+                case "}":
+                case ",":
+                    tokens.pop();
+                    return;
+            }
+            tree.addNode(tokens.peek().getExpressionType(), tokens.peek().getExpression(), n);
+            tokens.pop();
+        } else {
+            error("Unexpected token " + tokens.peek().getExpression() + ", expected " + t);
+        }
+
+    }
+
+    private void error(String s) {
+        System.out.println("Error: " + s);
+        tree.print();
+        System.exit(0);
+    }
+}

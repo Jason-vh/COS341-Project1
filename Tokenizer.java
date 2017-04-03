@@ -1,9 +1,11 @@
 import Tokens.Token;
+import Parser.Parser;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 import java.util.function.*;
@@ -107,6 +109,12 @@ class Tokenizer {
 			e.printStackTrace();
 		}
 
+	}
+
+	void parse() {
+		Parser p = new Parser();
+
+		p.parse(new ArrayList<>(mTokenVec));
 	}
 
 	private String errUnexpectedStr(String str, int line, int offest){
