@@ -42,6 +42,7 @@ public class Parser {
 
         String e = tokens.peek().getExpressionType();
         String i = tokens.peek().getExpression();
+        System.out.println("Parsing CODE - " + i);
         switch (e) {
             case "Variable":
                 parseInstruction(n);
@@ -437,7 +438,7 @@ public class Parser {
             PrintWriter writer = new PrintWriter(filename, "UTF-8");
 
             for (Node n : tree.tree) {
-                writer.print(n.toString());
+                writer.println(n.toString());
             }
 
             writer.close();

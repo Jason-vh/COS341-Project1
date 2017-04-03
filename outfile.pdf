@@ -179,12 +179,12 @@ def
 %%EndSetup
 setupLatin1
 %%Page: 1 1
-%%PageBoundingBox: 36 36 108 68
+%%PageBoundingBox: 36 36 2372 1088
 %%PageOrientation: Portrait
 0 0 1 beginpage
 gsave
-36 36 72 32 boxprim clip newpath
-0.0308213 0.0308213 set_scale 0 rotate 1172.02 1172.02 translate
+36 36 2336 1052 boxprim clip newpath
+1 1 set_scale 0 rotate 40 40 translate
 % ID0
 gsave
 1 setlinewidth
@@ -4468,7 +4468,7 @@ grestore
 %%EndPage: 1
 %%Trailer
 %%Pages: 1
-%%BoundingBox: 36 36 108 68
+%%BoundingBox: 36 36 2372 1088
 end
 restore
 %%EOF

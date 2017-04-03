@@ -7,8 +7,14 @@ import Parser.*;
 public class COS341_p1 {
 	
 	public static void main(String[] args) {
-	    System.out.println("Initializing Lexer");
-		Tokenizer tokenizer = new Tokenizer();
+        if(args.length < 1){
+            System.out.println("No file specified.");
+            System.exit(1);
+        }
+
+
+        System.out.println("Initializing Lexer");
+        Tokenizer tokenizer = new Tokenizer();
 
         tokenizer.linkFactory("Tokens.Assignment", AssignmentOp::new);
         tokenizer.linkFactory("Tokens.BooleanOp", BooleanOp::new);
@@ -26,11 +32,12 @@ public class COS341_p1 {
         tokenizer.linkFactory("Tokens.WhiteSpace", Tokens.WhiteSpace::new);
 
         tokenizer.init("tokens.txt");
+        tokenizer.tokenize(args[0]);
 
         System.out.println("Lexing complete, scanned in " + tokenizer.getTokens().size() + " tokens.");
         System.out.println("Writing tokens to file..");
-		
-		tokenizer.tokenize("data.txt");
+
+
 
 		tokenizer.saveTokensToFile("lexerOutput.txt");
 
