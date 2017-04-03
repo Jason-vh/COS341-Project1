@@ -42,7 +42,6 @@ public class Parser {
 
         String e = tokens.peek().getExpressionType();
         String i = tokens.peek().getExpression();
-        System.out.println("Parsing CODE - " + i);
         switch (e) {
             case "Variable":
                 parseInstruction(n);
