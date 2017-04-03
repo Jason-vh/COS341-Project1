@@ -27,14 +27,14 @@ public class Parser {
         if (tokens.size() == 0)
             return;
 
-        Node n = tree.addNode("Program", "NT", parent);
+        Node n = tree.addNode("PROG", "NT", parent);
 
         parseCode(n);
         parseProcedureDefinitions(n);
     }
 
     private void parseCode(Node parent) {
-        Node n = tree.addNode("Code", "NT", parent);
+        Node n = tree.addNode("CODE", "NT", parent);
 //        Node n = parent;
         if (tokens.size() == 0) {
             return;
@@ -84,7 +84,7 @@ public class Parser {
     }
 
     private void parseProcedure(Node parent) {
-        Node n = tree.addNode("Procedure", "NT", parent);
+        Node n = tree.addNode("PROC", "NT", parent);
 
         if (tokens.size() == 0)
             return;
@@ -115,7 +115,7 @@ public class Parser {
     }
 
     private void parseInstruction(Node parent) {
-        Node n = tree.addNode("Instruction", "NT", parent);
+        Node n = tree.addNode("INSTR", "NT", parent);
         if (tokens.size() == 0) {
             error("Uh there should be something here");
         }
@@ -149,7 +149,7 @@ public class Parser {
     }
 
     private void parseAssignment(Node parent) {
-        Node n = tree.addNode("Assignment", "NT", parent);
+        Node n = tree.addNode("ASSIGN", "NT", parent);
 
         if (tokens.size() == 0)
             error("Uh something should be here");
@@ -165,7 +165,6 @@ public class Parser {
     }
 
     private void parseVariable(Node parent) {
-//        Node n = tree.addNode("Variable", "NT", parent);
         Node n = parent;
 
         if (tokens.size() == 0)
@@ -174,9 +173,11 @@ public class Parser {
         String e = tokens.peek().getExpressionType();
         switch (e) {
             case "Variable":
+                n = tree.addNode("VAR", "NT", parent);
                 popToken("Variable", n);
                 break;
             case "ShortString":
+                n = tree.addNode("SVAR", "NT", parent);
                 popToken("ShortString", n);
                 break;
             case "Integer":
@@ -190,7 +191,7 @@ public class Parser {
     }
 
     private void parseNumericalOperation(Node parent) {
-        Node n = tree.addNode("NumericalOperation", "NT", parent);
+        Node n = tree.addNode("CALC", "NT", parent);
 
         if (tokens.size() == 0)
             return;
@@ -209,8 +210,7 @@ public class Parser {
     }
 
     private void parseNumericalExpression(Node parent) {
-//        Node n = tree.addNode("NumericalExpression", "NT", parent);
-        Node n = parent;
+        Node n = tree.addNode("NUMEXP", "NT", parent);
         if (tokens.size() == 0)
             return;
 
@@ -232,7 +232,7 @@ public class Parser {
     }
 
     private void parseInputOutput(Node parent) {
-        Node n = tree.addNode("IO Instruction", "NT", parent);
+        Node n = tree.addNode("IO", "NT", parent);
 
         if (tokens.size() == 0)
             error("Uh something should be here");
@@ -250,7 +250,7 @@ public class Parser {
     }
 
     private void parseConditional(Node parent) {
-        Node n = tree.addNode("IfStatement", "NT", parent);
+        Node n = tree.addNode("COND_BRANCH", "NT", parent);
 
         if (tokens.size() == 0)
             error("Uh there should be more stuff here");
@@ -272,7 +272,7 @@ public class Parser {
     }
 
     private void parseElse(Node parent) {
-        Node n = tree.addNode("ElseStatement", "NT", parent);
+        Node n = tree.addNode("ELSE", "NT", parent);
 
         String i = tokens.peek().getExpression();
         if (i.equals("else")) {
@@ -284,7 +284,7 @@ public class Parser {
     }
 
     private void parseBool(Node parent) {
-        Node n = parent;
+        Node n = tree.addNode("BOOL", "NT", parent);
 
         if (tokens.size() == 0)
             error("Uh there should be something else here");
@@ -293,7 +293,6 @@ public class Parser {
 
         switch (i) {
             case "(":
-                n = tree.addNode("BooleanCompare", "NT", parent);
                 popToken("(", n);
 //                popToken("Variable");
                 parseVariable(n);
@@ -303,7 +302,6 @@ public class Parser {
                 popToken(")", n);
                 break;
             case "eq":
-                n = tree.addNode("BooleanEquality", "NT", parent);
                 popToken("eq", n);
                 popToken("(", n);
                 parseVariable(n);
@@ -313,7 +311,6 @@ public class Parser {
                 break;
             case "and":
             case "or":
-                n = tree.addNode("BooleanOperation", "NT", parent);
                 popToken("BooleanOp", n);
                 popToken("(", n);
                 parseBool(n);
@@ -322,7 +319,6 @@ public class Parser {
                 popToken(")", n);
                 break;
             case "not":
-                n = tree.addNode("BooleanNot", "NT", parent);
                 popToken("not", n);
                 parseBool(n);
                 break;
@@ -332,7 +328,7 @@ public class Parser {
     }
 
     private void parseLoop(Node parent) {
-        Node n = tree.addNode("Loop", "NT", parent);
+        Node n = tree.addNode("COND_LOOP", "NT", parent);
 
         if (tokens.size() == 0) {
             error("Uh there should be something else here");

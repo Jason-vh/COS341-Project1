@@ -52,7 +52,7 @@ public class SyntaxTree {
 
     void generateGraph() {
         try{
-            PrintWriter writer = new PrintWriter("graph.txt", "UTF-8");
+            PrintWriter writer = new PrintWriter("graph.dot", "UTF-8");
             writer.println("digraph syntaxtree {");
             for (Node n : tree) {
                 writer.println("ID" + n.id + " [label=\"" + (n.description.equals("NT") ? n.type : n.description.replace("\"", "\\\"")) + "\"];");

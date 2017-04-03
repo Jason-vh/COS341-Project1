@@ -2,23 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="954eac0d-4624-4538-a365-2564dc619ee8" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Java.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Java1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Parser/Node.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Parser/Parser.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Parser/SyntaxTree.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Project1a1.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Tokens/Spacing.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/COS341_p1.java" afterPath="$PROJECT_DIR$/COS341_p1.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tokenizer.java" afterPath="$PROJECT_DIR$/Tokenizer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tokens/BooleanOp.java" afterPath="$PROJECT_DIR$/Tokens/BooleanOp.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tokens/Comparison.java" afterPath="$PROJECT_DIR$/Tokens/Comparison.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tokens/ShortString.java" afterPath="$PROJECT_DIR$/Tokens/ShortString.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tokens/TestToken.java" afterPath="$PROJECT_DIR$/Tokens/TestToken.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tokens/Token.java" afterPath="$PROJECT_DIR$/Tokens/Token.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tokens/Variable.java" afterPath="$PROJECT_DIR$/Tokens/Variable.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data.txt" afterPath="$PROJECT_DIR$/data.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tokens.txt" afterPath="$PROJECT_DIR$/tokens.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Project1a1/Parser/Parser.class" afterPath="$PROJECT_DIR$/out/production/Project1a1/Parser/Parser.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Project1a1/Parser/SyntaxTree.class" afterPath="$PROJECT_DIR$/out/production/Project1a1/Parser/SyntaxTree.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/outfile.pdf" afterPath="$PROJECT_DIR$/outfile.pdf" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Parser/Parser.java" afterPath="$PROJECT_DIR$/Parser/Parser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Parser/SyntaxTree.java" afterPath="$PROJECT_DIR$/Parser/SyntaxTree.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/graph.txt" afterPath="$PROJECT_DIR$/graph.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Project1a1/graph.txt" afterPath="$PROJECT_DIR$/out/production/Project1a1/graph.txt" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -65,11 +56,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SyntaxTree.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="SyntaxTree.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Parser/SyntaxTree.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="415">
-              <caret line="57" column="130" lean-forward="false" selection-start-line="57" selection-start-column="130" selection-end-line="57" selection-end-column="130" />
+            <state relative-caret-position="91">
+              <caret line="54" column="59" lean-forward="false" selection-start-line="54" selection-start-column="59" selection-end-line="54" selection-end-column="59" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#169#175#0" expanded="true" />
@@ -119,11 +110,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Parser.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Parser.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Parser/Parser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="40" column="9" lean-forward="true" selection-start-line="40" selection-start-column="9" selection-end-line="40" selection-end-column="9" />
+            <state relative-caret-position="-2101">
+              <caret line="224" column="26" lean-forward="false" selection-start-line="224" selection-start-column="26" selection-end-line="224" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -223,8 +214,8 @@
         <option value="$PROJECT_DIR$/Tokenizer.java" />
         <option value="$PROJECT_DIR$/Tokens/Token.java" />
         <option value="$PROJECT_DIR$/Parser/Node.java" />
-        <option value="$PROJECT_DIR$/Parser/SyntaxTree.java" />
         <option value="$PROJECT_DIR$/Parser/Parser.java" />
+        <option value="$PROJECT_DIR$/Parser/SyntaxTree.java" />
       </list>
     </option>
   </component>
@@ -802,7 +793,7 @@
       <workItem from="1487688708419" duration="6602000" />
       <workItem from="1487861606969" duration="1785000" />
       <workItem from="1491211194780" duration="7951000" />
-      <workItem from="1491219489014" duration="16158000" />
+      <workItem from="1491219489014" duration="16601000" />
     </task>
     <task id="LOCAL-00001" summary="Added classes, changes all over the place.">
       <created>1487693321384</created>
@@ -822,7 +813,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="32496000" />
+    <option name="totallyTimeSpent" value="32939000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -834,7 +825,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="-1" width="1366" height="768" extended-state="7" />
+    <frame x="0" y="-1" width="1366" height="768" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1246,19 +1237,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Parser/SyntaxTree.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="57" column="130" lean-forward="false" selection-start-line="57" selection-start-column="130" selection-end-line="57" selection-end-column="130" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#169#175#0" expanded="true" />
-            <element signature="e#790#791#0" expanded="true" />
-            <element signature="e#820#821#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/data.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
@@ -1277,10 +1255,23 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Parser/Parser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="40" column="9" lean-forward="true" selection-start-line="40" selection-start-column="9" selection-end-line="40" selection-end-column="9" />
+        <state relative-caret-position="-2101">
+          <caret line="224" column="26" lean-forward="false" selection-start-line="224" selection-start-column="26" selection-end-line="224" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Parser/SyntaxTree.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="91">
+          <caret line="54" column="59" lean-forward="false" selection-start-line="54" selection-start-column="59" selection-end-line="54" selection-end-column="59" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#169#175#0" expanded="true" />
+            <element signature="e#790#791#0" expanded="true" />
+            <element signature="e#820#821#0" expanded="true" />
           </folding>
         </state>
       </provider>
