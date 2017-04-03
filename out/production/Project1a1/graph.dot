@@ -1,5 +1,4 @@
 digraph syntaxtree {
-size="1,1";
 ID0 [label="PROG"];
 ID2 [label="CODE"];
 ID3 [label="INSTR"];

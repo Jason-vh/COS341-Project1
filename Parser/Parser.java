@@ -2,6 +2,8 @@ package Parser;
 
 import Tokens.Token;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -10,16 +12,14 @@ public class Parser {
     private SyntaxTree tree = new SyntaxTree();
 
     public void parse(ArrayList<Token> _tokens) {
-        System.out.println("Received " + _tokens.size() + " tokens.");
         for (int x = _tokens.size()-1; x >= 0; x--) {
             tokens.push(_tokens.get(x));
         }
 
-        System.out.println("The top token is " + tokens.peek());
         if (tokens.size() > 0)
             parseProgram(tree.root);
-        tree.print();
-        tree.DFS();
+//        tree.print();
+//        tree.DFS();
         tree.generateGraph();
     }
 
@@ -42,7 +42,6 @@ public class Parser {
 
         String e = tokens.peek().getExpressionType();
         String i = tokens.peek().getExpression();
-        System.out.println("Parsing Code [" + e + " - " + i + "]");
         switch (e) {
             case "Variable":
                 parseInstruction(n);
@@ -122,7 +121,6 @@ public class Parser {
 
         String e = tokens.peek().getExpressionType();
         String i = tokens.peek().getExpression();
-        System.out.println("Parsing Instruction [" + e + " - " + i + "]");
         if (e.equals("Variable")) {
             Token t = tokens.pop();
             if (tokens.peek() != null && tokens.peek().getExpressionType().equals("AssignmentOp")) {
@@ -429,8 +427,24 @@ public class Parser {
     }
 
     private void error(String s) {
-        System.out.println("Error: " + s);
-        tree.print();
+        System.out.println("Error: " + s + " at " + tokens.peek().getLocation());
+//        tree.print();
         System.exit(0);
+    }
+
+    public void saveTreeToFile(String filename) {
+        try {
+            PrintWriter writer = new PrintWriter(filename, "UTF-8");
+
+            for (Node n : tree.tree) {
+                writer.print(n.toString());
+            }
+
+            writer.close();
+        } catch (IOException e) {
+            System.err.format("Exception occurred trying to print to %s", filename);
+            e.printStackTrace();
+        }
+
     }
 }

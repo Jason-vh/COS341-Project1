@@ -1,6 +1,5 @@
-[T0,Variable,inpt]
+[T0,IO,input]
 [T0,Grouping,(]
-[T0,Variable,x]
 [T0,Grouping,)]
 [T0,Grouping,;]
 [T0,Variable,num]
